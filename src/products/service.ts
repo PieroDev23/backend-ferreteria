@@ -1,4 +1,4 @@
-import { formatProduct } from "./helpers";
+import { formatProduct } from "./helper";
 import { ProductsRepository } from "./repository";
 
 export class ProductsService {

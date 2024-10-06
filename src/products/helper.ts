@@ -1,4 +1,4 @@
-import { Product } from "../../db";
+import { Product } from "../db";
 
 export const formatProduct = ({
   products,
