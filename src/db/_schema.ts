@@ -8,9 +8,12 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-export const ferreteriSchema = pgSchema("ferreteria");
+import { createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 
-export const categories = ferreteriSchema.table("categories", {
+export const ferreteriaSchema = pgSchema("ferreteria");
+
+export const categories = ferreteriaSchema.table("categories", {
   id: uuid("id")
     .default(sql`gen_random_uuid()`)
     .primaryKey(),
@@ -21,7 +24,10 @@ export const categories = ferreteriSchema.table("categories", {
   deletedAt: timestamp("deleted_at"),
 });
 
-export const inventory = ferreteriSchema.table("inventory", {
+export const categoriesSchema = createSelectSchema(categories);
+export type CategoriesSchema = z.infer<typeof categoriesSchema>;
+
+export const inventory = ferreteriaSchema.table("inventory", {
   id: uuid("id")
     .default(sql`gen_random_uuid()`)
     .primaryKey(),
@@ -31,7 +37,10 @@ export const inventory = ferreteriSchema.table("inventory", {
   deletedAt: timestamp("deleted_at"),
 });
 
-export const discounts = ferreteriSchema.table("discounts", {
+export const inventorySchema = createSelectSchema(inventory);
+export type InventorySchema = z.infer<typeof inventorySchema>;
+
+export const discounts = ferreteriaSchema.table("discounts", {
   id: uuid("id")
     .default(sql`gen_random_uuid()`)
     .primaryKey(),
@@ -41,7 +50,10 @@ export const discounts = ferreteriSchema.table("discounts", {
   deletedAt: timestamp("deleted_at"),
 });
 
-export const products = ferreteriSchema.table("products", {
+export const discountsSchema = createSelectSchema(discounts);
+export type DiscountSchema = z.infer<typeof discountsSchema>;
+
+export const products = ferreteriaSchema.table("products", {
   id: uuid("id")
     .default(sql`gen_random_uuid()`)
     .primaryKey(),
@@ -57,3 +69,13 @@ export const products = ferreteriSchema.table("products", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   deletedAt: timestamp("deleted_at"),
 });
+
+export const productsSchema = createSelectSchema(products);
+export type ProductSchema = z.infer<typeof productsSchema>;
+
+export type Product = {
+  products: ProductSchema;
+  inventory: InventorySchema;
+  discounts: DiscountSchema | null;
+  categories: CategoriesSchema;
+};

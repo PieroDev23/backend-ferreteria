@@ -6,8 +6,8 @@ export async function getProductsController(
   res: express.Response,
 ) {
   const products = await ProductsService.getProducts();
-
   res.json({
+    ok: true,
     products,
   });
 }
