@@ -1,5 +1,12 @@
 import { sql } from "drizzle-orm";
-import { integer, pgSchema, smallint, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgSchema,
+  smallint,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 export const ferreteriSchema = pgSchema("ferreteria");
 
