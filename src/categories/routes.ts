@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCategoires } from "./get-categories";
+import { getCategories } from "./get-categories";
 
 export const categoriesRouter = Router();
-categoriesRouter.get("/get-all", getCategoires);
+categoriesRouter.get("/get-all", getCategories);

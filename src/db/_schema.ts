@@ -8,9 +8,6 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
-
 export const ferreteriaSchema = pgSchema("ferreteria");
 
 export const categories = ferreteriaSchema.table("categories", {
@@ -24,9 +21,6 @@ export const categories = ferreteriaSchema.table("categories", {
   deletedAt: timestamp("deleted_at"),
 });
 
-export const categoriesSchema = createSelectSchema(categories);
-export type CategoriesSchema = z.infer<typeof categoriesSchema>;
-
 export const inventory = ferreteriaSchema.table("inventory", {
   id: uuid("id")
     .default(sql`gen_random_uuid()`)
@@ -37,9 +31,6 @@ export const inventory = ferreteriaSchema.table("inventory", {
   deletedAt: timestamp("deleted_at"),
 });
 
-export const inventorySchema = createSelectSchema(inventory);
-export type InventorySchema = z.infer<typeof inventorySchema>;
-
 export const discounts = ferreteriaSchema.table("discounts", {
   id: uuid("id")
     .default(sql`gen_random_uuid()`)
@@ -49,9 +40,6 @@ export const discounts = ferreteriaSchema.table("discounts", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   deletedAt: timestamp("deleted_at"),
 });
-
-export const discountsSchema = createSelectSchema(discounts);
-export type DiscountSchema = z.infer<typeof discountsSchema>;
 
 export const products = ferreteriaSchema.table("products", {
   id: uuid("id")
@@ -69,13 +57,3 @@ export const products = ferreteriaSchema.table("products", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   deletedAt: timestamp("deleted_at"),
 });
-
-export const productsSchema = createSelectSchema(products);
-export type ProductSchema = z.infer<typeof productsSchema>;
-
-export type Product = {
-  products: ProductSchema;
-  inventory: InventorySchema;
-  discounts: DiscountSchema | null;
-  categories: CategoriesSchema;
-};

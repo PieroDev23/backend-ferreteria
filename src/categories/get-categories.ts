@@ -1,7 +1,7 @@
 import express from "express";
 import { categories, db } from "../db";
 
-export async function getCategoires(
+export async function getCategories(
   req: express.Request,
   res: express.Response,
 ) {
