@@ -30,5 +30,7 @@ export class ProductsRepository {
       .where(eq(products.id, id));
   }
 
-  // static async deleteProduct(productId: string) { }
+  // static async deleteProduct(productId: string) {
+
+  // }
 }
