@@ -50,7 +50,9 @@ export const products = ferreteriaSchema.table("products", {
   description: varchar("description").notNull(),
   price: integer("price").notNull(),
   sku: varchar("sku").notNull(),
-  categoryId: uuid("category_id").references(() => categories.id),
+  categoryId: uuid("category_id")
+    .references(() => categories.id)
+    .notNull(),
   discountId: uuid("discount_id").references(() => discounts.id),
   inventoryId: uuid("inventory_id").references(() => inventory.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),

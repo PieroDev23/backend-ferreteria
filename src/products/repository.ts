@@ -1,8 +1,15 @@
 import { eq } from "drizzle-orm";
 import { categories, db, discounts, inventory, products } from "../db";
-import { ProductUpdateSchema } from "./types";
+import { ProductInsertSchema, ProductUpdateSchema } from "./types";
 
 export class ProductsRepository {
+  static async createProduct(product: ProductInsertSchema) {
+    return await db
+      .insert(products)
+      .values({ ...product })
+      .returning();
+  }
+
   static async getAllProducts() {
     return await db
       .select()
@@ -27,10 +34,19 @@ export class ProductsRepository {
     return await db
       .update(products)
       .set({ ...fields })
-      .where(eq(products.id, id));
+      .where(eq(products.id, id))
+      .returning();
   }
 
-  // static async deleteProduct(productId: string) {
-
-  // }
+  static async deleteProduct(productId: string) {
+    // updating product
+    await db
+      .update(products)
+      .set({
+        deletedAt: new Date(),
+        inventoryId: null,
+      })
+      .where(eq(products.id, productId))
+      .returning();
+  }
 }

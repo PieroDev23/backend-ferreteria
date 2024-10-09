@@ -1,5 +1,7 @@
+import { InventoryService } from "../inventory/service";
+import { InventoryInsertSchema } from "../inventory/types";
 import { ProductsRepository } from "./repository";
-import { ProductUpdateSchema } from "./types";
+import { ProductInsertSchema, ProductUpdateSchema } from "./types";
 
 export class ProductsService {
   static calculateDiscount(discount: number | undefined, price: number) {
@@ -39,13 +41,23 @@ export class ProductsService {
     };
   }
 
-  static async updateProduct(product: ProductUpdateSchema) {
-    const productUpdated = await ProductsRepository.updateProduct(product);
-    return productUpdated;
+  static async createProduct(
+    product: ProductInsertSchema,
+    inventory: InventoryInsertSchema,
+  ) {
+    const [inventoryCreated] =
+      await InventoryService.createInventory(inventory);
+    product.inventoryId = inventoryCreated.id;
+    const [productCreated] = await ProductsRepository.createProduct(product);
+    return productCreated;
   }
 
-  // static async deleteProduct(productId: string) {
-  //   const productDeleted = await ProductsRepository.deleteProduct(productId);
-  //   console.log({ productDeleted });
-  // }
+  static async updateProduct(product: ProductUpdateSchema) {
+    return await ProductsRepository.updateProduct(product);
+  }
+
+  static async deleteProduct(productId: string, inventoryId: string) {
+    await ProductsRepository.deleteProduct(productId);
+    await InventoryService.deleteInventory(inventoryId);
+  }
 }
