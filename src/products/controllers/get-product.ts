@@ -1,5 +1,5 @@
 import express from "express";
-import { ProductsService } from "./service";
+import { ProductsService } from "../service";
 
 export async function getProductById(
   req: express.Request,
@@ -8,20 +8,15 @@ export async function getProductById(
   try {
     const productId = req.params.id;
     if (!productId) {
-      res.status(404).json({
-        ok: false,
-        message: "Product id is not provided",
-      });
-
+      res
+        .status(404)
+        .json({ ok: false, message: "Product id is not provided" });
       return;
     }
 
     const result = await ProductsService.getProductById(req.params.id);
     if (!result) {
-      res.status(404).json({
-        ok: false,
-        message: "Product not founded",
-      });
+      res.status(404).json({ ok: false, message: "Product not founded" });
       return;
     }
 

@@ -4,6 +4,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const productSelectSchema = createSelectSchema(products);
 export const productInsertSchema = createInsertSchema(products);
+
 export const productUpdateSchema = z.object({
   id: z.string().uuid(),
   image: z.string(),
@@ -16,10 +17,10 @@ export const productUpdateSchema = z.object({
 
 // CRUD operation products
 export type ProductSelectSchema = z.infer<typeof productSelectSchema>;
-export type ProductInsertScehma = z.infer<typeof productInsertSchema>;
+export type ProductInsertSchema = z.infer<typeof productInsertSchema>;
 export type ProductUpdateSchema = Required<
   Pick<
-    ProductInsertScehma,
+    ProductInsertSchema,
     "id" | "image" | "sku" | "price" | "name" | "description"
   >
 >;
