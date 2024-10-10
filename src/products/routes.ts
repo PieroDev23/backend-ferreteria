@@ -7,8 +7,8 @@ import { deleteProduct } from "./controllers/delete-product";
 
 export const productsRouter = Router();
 
+productsRouter.get("/", getProducts);
+productsRouter.get("/:id", getProductById);
 productsRouter.post("/create", createProduct);
-productsRouter.get("/get-all", getProducts);
-productsRouter.get("/get-one/:id", getProductById);
-productsRouter.put("/product-update", updateProduct);
+productsRouter.put("/update", updateProduct);
 productsRouter.delete("/delete", deleteProduct);
