@@ -8,7 +8,7 @@ export class ProductsService {
   }
 
   static async getProducts() {
-    const products = await ProductsRepository.getAllProducts();
+    const products = await ProductsRepository.getProducts();
     return products.map(({ products, inventory, categories, discounts }) => ({
       id: products.id,
       name: products.name,

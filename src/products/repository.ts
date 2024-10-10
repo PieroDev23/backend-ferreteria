@@ -10,7 +10,7 @@ export class ProductsRepository {
       .returning();
   }
 
-  static async getAllProducts() {
+  static async getProducts() {
     return await db
       .select()
       .from(products)
