@@ -6,8 +6,7 @@ export async function deleteProduct(
   res: express.Response,
 ) {
   try {
-    const productId = req.query.productId?.toString();
-    const inventoryId = req.query.inventoryId?.toString();
+    const { productId, inventoryId } = req.params;
 
     if (!productId || !inventoryId) {
       res.status(400).json({ ok: false, message: "invalid params" });
