@@ -6,7 +6,10 @@ export class InventoryService {
     return await InventoryRepository.createInventory(inventory);
   }
 
-  static async updateInventory(inventory: InventoryInsertSchema) {
+  static async updateInventory(inventory: {
+    quantity: number;
+    inventoryId: string;
+  }) {
     return await InventoryRepository.updateInventory(inventory);
   }
 

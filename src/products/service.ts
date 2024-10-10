@@ -54,7 +54,12 @@ export class ProductsService {
 
   static async updateProduct(product: ProductUpdateSchema) {
     const { quantity, ...rest } = product;
-    await InventoryService.updateInventory({ quantity });
+
+    await InventoryService.updateInventory({
+      quantity,
+      inventoryId: product.inventoryId,
+    });
+
     return await ProductsRepository.updateProduct(rest);
   }
 

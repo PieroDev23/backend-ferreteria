@@ -10,8 +10,17 @@ export class InventoryRepository {
       .returning();
   }
 
-  static async updateInventory({ quantity }: InventoryInsertSchema) {
-    return await db.update(inventory).set({ quantity });
+  static async updateInventory({
+    quantity,
+    inventoryId,
+  }: {
+    quantity: number;
+    inventoryId: string;
+  }) {
+    return await db
+      .update(inventory)
+      .set({ quantity })
+      .where(eq(inventory.id, inventoryId));
   }
 
   static async deleteInventory(inventoryId: string) {
