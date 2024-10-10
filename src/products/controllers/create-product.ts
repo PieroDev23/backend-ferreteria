@@ -1,6 +1,5 @@
 import express from "express";
 import { ProductsService } from "../service";
-import { inventoryInsertSchema } from "../../inventory/types";
 import { productInsertSchema } from "../types";
 
 export async function createProduct(
@@ -8,28 +7,14 @@ export async function createProduct(
   res: express.Response,
 ) {
   try {
-    const { product, inventory } = req.body;
+    const { success, error, data } = productInsertSchema.safeParse(req.body);
 
-    const inventoryInsert = inventoryInsertSchema.safeParse(inventory);
-    const productInsert = productInsertSchema.safeParse(product);
-
-    if (!inventoryInsert.success) {
-      res.status(400).json({ ok: false, error: inventoryInsert.error });
+    if (!success) {
+      res.status(400).json({ ok: false, error });
       return;
     }
 
-    if (!productInsert.success) {
-      res.status(400).json({ ok: false, error: productInsert.error });
-      return;
-    }
-
-    const { data: inventoryData } = inventoryInsert;
-    const { data: productData } = productInsert;
-
-    const productCreated = await ProductsService.createProduct(
-      productData,
-      inventoryData,
-    );
+    const productCreated = await ProductsService.createProduct(data);
     res.status(200).json({ ok: true, product: productCreated });
   } catch (error) {
     if (error instanceof Error) {

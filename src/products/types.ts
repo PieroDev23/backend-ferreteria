@@ -1,26 +1,44 @@
 import { z } from "zod";
-import { products } from "../db";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-export const productSelectSchema = createSelectSchema(products);
-export const productInsertSchema = createInsertSchema(products);
+export const productInsertSchema = z.object({
+  image: z.string().nullable(),
+  name: z.string(),
+  description: z.string(),
+  quantity: z.number(),
+  sku: z.string(),
+  price: z.number(),
+  categoryId: z.string().uuid(),
+  inventoryId: z.string().uuid(),
+  discountId: z.string().uuid().nullable(),
+});
+
+export const productSelectSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  sku: z.string(),
+  description: z.string(),
+  price: z.number(),
+  category: z.string(),
+  categoryId: z.string().uuid(),
+  quantity: z.number().nullable(),
+  discount: z.number(),
+  totalPrice: z.number(),
+});
 
 export const productUpdateSchema = z.object({
   id: z.string().uuid(),
-  image: z.string(),
+  image: z.string().nullable(),
   name: z.string(),
+  quantity: z.number(),
   description: z.string(),
   sku: z.string(),
   price: z.number(),
   categoryId: z.string().uuid(),
+  inventoryId: z.string().uuid(),
+  discountId: z.string().uuid().nullable(),
 });
 
 // CRUD operation products
 export type ProductSelectSchema = z.infer<typeof productSelectSchema>;
 export type ProductInsertSchema = z.infer<typeof productInsertSchema>;
-export type ProductUpdateSchema = Required<
-  Pick<
-    ProductInsertSchema,
-    "id" | "image" | "sku" | "price" | "name" | "description"
-  >
->;
+export type ProductUpdateSchema = z.infer<typeof productUpdateSchema>;

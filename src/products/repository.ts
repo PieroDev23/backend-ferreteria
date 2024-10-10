@@ -3,7 +3,7 @@ import { categories, db, discounts, inventory, products } from "../db";
 import { ProductInsertSchema, ProductUpdateSchema } from "./types";
 
 export class ProductsRepository {
-  static async createProduct(product: ProductInsertSchema) {
+  static async createProduct(product: Omit<ProductInsertSchema, "quantity">) {
     return await db
       .insert(products)
       .values({ ...product })
@@ -29,7 +29,7 @@ export class ProductsRepository {
       .where(eq(products.id, productId));
   }
 
-  static async updateProduct(product: ProductUpdateSchema) {
+  static async updateProduct(product: Omit<ProductUpdateSchema, "quantity">) {
     const { id, ...fields } = product;
     return await db
       .update(products)

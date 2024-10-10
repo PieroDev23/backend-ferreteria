@@ -1,5 +1,4 @@
 import { InventoryService } from "../inventory/service";
-import { InventoryInsertSchema } from "../inventory/types";
 import { ProductsRepository } from "./repository";
 import { ProductInsertSchema, ProductUpdateSchema } from "./types";
 
@@ -41,19 +40,22 @@ export class ProductsService {
     };
   }
 
-  static async createProduct(
-    product: ProductInsertSchema,
-    inventory: InventoryInsertSchema,
-  ) {
-    const [inventoryCreated] =
-      await InventoryService.createInventory(inventory);
+  static async createProduct(newProduct: ProductInsertSchema) {
+    const { quantity, ...product } = newProduct;
+
+    const [inventoryCreated] = await InventoryService.createInventory({
+      quantity,
+    });
     product.inventoryId = inventoryCreated.id;
+
     const [productCreated] = await ProductsRepository.createProduct(product);
     return productCreated;
   }
 
   static async updateProduct(product: ProductUpdateSchema) {
-    return await ProductsRepository.updateProduct(product);
+    const { quantity, ...rest } = product;
+    await InventoryService.updateInventory({ quantity });
+    return await ProductsRepository.updateProduct(rest);
   }
 
   static async deleteProduct(productId: string, inventoryId: string) {
