@@ -1,6 +1,7 @@
 import express from "express";
 import { ProductsService } from "../service";
 import { productUpdateSchema } from "../types";
+import { STATUS_CODES } from "../../_statusCodes";
 
 export async function updateProduct(
   req: express.Request,
@@ -11,7 +12,7 @@ export async function updateProduct(
     const { success, data, error } = productUpdateSchema.safeParse(product);
 
     if (!success) {
-      res.status(400).json({
+      res.status(STATUS_CODES.BAD_REQUEST).json({
         message: "invalid schema",
         error,
       });
@@ -19,7 +20,10 @@ export async function updateProduct(
     }
 
     await ProductsService.updateProduct(data);
-    res.status(200).json({ ok: true, product: data });
+    res.status(STATUS_CODES.OK).json({
+      ok: true,
+      product: data,
+    });
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.name);

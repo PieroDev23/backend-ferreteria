@@ -1,5 +1,6 @@
 import express from "express";
 import { ProductsService } from "../service";
+import { STATUS_CODES } from "../../_statusCodes";
 
 export async function getProductById(
   req: express.Request,
@@ -8,19 +9,26 @@ export async function getProductById(
   try {
     const productId = req.params.id;
     if (!productId) {
-      res
-        .status(404)
-        .json({ ok: false, message: "Product id is not provided" });
+      res.status(STATUS_CODES.BAD_REQUEST).json({
+        ok: false,
+        message: "Product id is not provided",
+      });
       return;
     }
 
-    const result = await ProductsService.getProductById(req.params.id);
-    if (!result) {
-      res.status(404).json({ ok: false, message: "Product not founded" });
+    const product = await ProductsService.getProductById(req.params.id);
+    if (!product) {
+      res.status(STATUS_CODES.BAD_REQUEST).json({
+        ok: false,
+        message: "Product not founded",
+      });
       return;
     }
 
-    res.status(200).json({ ok: true, product: result });
+    res.status(STATUS_CODES.OK).json({
+      ok: true,
+      product,
+    });
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.name);

@@ -10,6 +10,20 @@ import {
 
 export const ferreteriaSchema = pgSchema("ferreteria");
 
+export const users = ferreteriaSchema.table("users", {
+  id: uuid("id")
+    .default(sql`gen_random_uuid()`)
+    .primaryKey(),
+  firstname: varchar("firstname").notNull(),
+  lastname: varchar("lastname").notNull(),
+  password: varchar("password").notNull(),
+  phone: integer("phone"),
+  email: varchar("email").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  deletedAt: timestamp("deleted_at"),
+});
+
 export const categories = ferreteriaSchema.table("categories", {
   id: uuid("id")
     .default(sql`gen_random_uuid()`)
