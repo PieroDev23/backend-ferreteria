@@ -2,7 +2,7 @@ import { Router } from "express";
 import { loginUser } from "./http/login";
 import { registerUser } from "./http/register";
 
-export const userRouter = Router();
+export const usersRouter = Router();
 
-userRouter.post("/login", loginUser);
-userRouter.post("/register", registerUser);
+usersRouter.post("/login", loginUser);
+usersRouter.post("/register", registerUser);

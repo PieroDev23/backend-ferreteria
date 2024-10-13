@@ -1,16 +1,16 @@
 import express from "express";
-import { userInserSchema, UserInserSchema } from "../types";
 import { UserService } from "../service";
 import { STATUS_CODES } from "../../_statusCodes";
 import { JWT } from "../../_jwt";
+import { UserInsertSchema, userInsertSchema } from "../types";
 
 export async function registerUser(
   req: express.Request,
   res: express.Response,
 ) {
   try {
-    const newUser: UserInserSchema = req.body;
-    const { success, data, error } = userInserSchema.safeParse(newUser);
+    const newUser: UserInsertSchema = req.body;
+    const { success, data, error } = userInsertSchema.safeParse(newUser);
 
     if (!success) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
@@ -34,7 +34,7 @@ export async function registerUser(
 
     const [user] = await UserService.createUser(data);
 
-    const jwt = await new JWT().create(
+    const token = await new JWT().create(
       user,
       Math.floor(Date.now() / 1000) + 10,
       "CLIENT",
@@ -42,10 +42,8 @@ export async function registerUser(
 
     res.status(STATUS_CODES.OK).json({
       ok: true,
-      user: {
-        ...user,
-        jwt,
-      },
+      user,
+      token,
     });
   } catch (error) {
     if (error instanceof Error) {

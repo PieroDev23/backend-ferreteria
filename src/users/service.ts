@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { UserInserSchema } from "./types";
+import { UserInsertSchema } from "./types";
 import { UserRepository } from "./repository";
 
 export class UserService {
@@ -12,7 +12,7 @@ export class UserService {
     return bcrypt.compareSync(password, hashedPassword);
   }
 
-  static async createUser(user: UserInserSchema) {
+  static async createUser(user: UserInsertSchema) {
     return await UserRepository.createUser(user);
   }
 

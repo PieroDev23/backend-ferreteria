@@ -8,6 +8,13 @@
       "when": 1728174602951,
       "tag": "0000_round_valeria_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1728801166541,
+      "tag": "0001_long_mantis",
+      "breakpoints": true
     }
   ]
 }

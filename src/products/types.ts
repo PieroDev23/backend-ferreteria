@@ -1,15 +1,14 @@
 import { z } from "zod";
 
 export const productInsertSchema = z.object({
-  image: z.string().nullable(),
+  image: z.string().nullable().optional(),
   name: z.string(),
   description: z.string(),
   quantity: z.number(),
   sku: z.string(),
   price: z.number(),
   categoryId: z.string().uuid(),
-  inventoryId: z.string().uuid(),
-  discountId: z.string().uuid().nullable(),
+  inventoryId: z.string().uuid().optional(),
 });
 
 export const productSelectSchema = z.object({

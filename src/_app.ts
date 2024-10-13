@@ -6,6 +6,7 @@ import { pool } from "./db";
 import { categoriesRouter } from "./categories/routes";
 import { productsRouter } from "./products/routes";
 import { AppError } from "./_error";
+import { usersRouter } from "./users/routes";
 
 export class FerreteriaApp {
   private _app: express.Express;
@@ -21,6 +22,7 @@ export class FerreteriaApp {
     const baseRoute = "/api/v1";
     this._app.use(`${baseRoute}/products`, productsRouter);
     this._app.use(`${baseRoute}/categories`, categoriesRouter);
+    this._app.use(`${baseRoute}/users`, usersRouter);
   }
 
   middlewares() {

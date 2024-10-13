@@ -1,11 +1,10 @@
-import { createSecretKey, KeyObject } from "crypto";
 import { errors, jwtVerify, SignJWT } from "jose";
 import { AppError } from "./_error";
 
 export class JWT {
-  private secretKey: KeyObject;
+  private secretKey: Uint8Array;
   constructor() {
-    this.secretKey = createSecretKey(process.env.JWT_SECRET!, "utf-8");
+    this.secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
   }
 
   create(payload: Record<string, unknown>, exp: number, issuer: string) {

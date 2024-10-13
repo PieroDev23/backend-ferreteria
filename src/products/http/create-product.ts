@@ -9,7 +9,6 @@ export async function createProduct(
 ) {
   try {
     const { success, error, data } = productInsertSchema.safeParse(req.body);
-
     if (!success) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
         ok: false,
@@ -18,10 +17,10 @@ export async function createProduct(
       return;
     }
 
-    const productCreated = await ProductsService.createProduct(data);
+    const product = await ProductsService.createProduct(data);
     res.status(STATUS_CODES.OK).json({
       ok: true,
-      product: productCreated,
+      product,
     });
   } catch (error) {
     if (error instanceof Error) {
