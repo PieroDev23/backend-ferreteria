@@ -35,7 +35,6 @@ export async function registerUser(
     data.password = passwordHashed;
 
     const [user] = await UserService.createUser(data);
-
     const token = await new JWT().create(
       user,
       Math.floor(Date.now() / 1000) + 10,
