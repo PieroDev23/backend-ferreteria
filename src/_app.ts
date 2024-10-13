@@ -7,6 +7,7 @@ import { categoriesRouter } from "./categories/routes";
 import { productsRouter } from "./products/routes";
 import { AppError } from "./_error";
 import { usersRouter } from "./users/routes";
+import { logger } from "./_log.";
 
 export class FerreteriaApp {
   private _app: express.Express;
@@ -26,8 +27,8 @@ export class FerreteriaApp {
   }
 
   middlewares() {
-    this._app.use(express.json());
     this._app.disable("x-powered-by");
+    this._app.use(express.json());
     this._app.use(morgan("dev"));
     this._app.use(cors());
   }
@@ -35,22 +36,23 @@ export class FerreteriaApp {
   async dbConnection() {
     try {
       await pool.connect();
-      console.log("🚀 Database connected");
+      logger.info("🚀 Database connected");
     } catch (error) {
-      throw AppError.fromError(error as Error);
+      const appError = AppError.fromError(error as Error);
+      logger.error(appError);
+      throw appError;
     }
   }
 
   run() {
     const port = process.env["APP_PORT"];
-
     if (!port) {
-      console.log("port is needed");
+      logger.error("port is not defined");
       return;
     }
 
     this._app.listen(port, () => {
-      console.log(`🐸 Application strated on port ${port}`);
+      logger.info(`✨ Application running on port ${port}`);
     });
   }
 }
