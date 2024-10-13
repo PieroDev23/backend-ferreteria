@@ -1,6 +1,7 @@
 import express from "express";
 import { ProductsService } from "../service";
 import { STATUS_CODES } from "../../_statusCodes";
+import { logger } from "../../_log.";
 
 export async function getProductById(
   req: express.Request,
@@ -29,12 +30,8 @@ export async function getProductById(
       ok: true,
       product,
     });
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.name);
-      console.error(error.message);
-    }
-
-    res.status(500).json({ ok: false, message: "Server error" });
+  } catch (e) {
+    logger.error(e as Error);
+    res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({ ok: false });
   }
 }

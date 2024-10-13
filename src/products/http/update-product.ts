@@ -2,6 +2,7 @@ import express from "express";
 import { ProductsService } from "../service";
 import { productUpdateSchema } from "../types";
 import { STATUS_CODES } from "../../_statusCodes";
+import { logger } from "../../_log.";
 
 export async function updateProduct(
   req: express.Request,
@@ -24,12 +25,8 @@ export async function updateProduct(
       ok: true,
       product: data,
     });
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.name);
-      console.log(error.message);
-    }
-
-    res.status(500).json({ ok: false, message: "Server Error" });
+  } catch (e) {
+    logger.error(e as Error);
+    res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({ ok: false });
   }
 }

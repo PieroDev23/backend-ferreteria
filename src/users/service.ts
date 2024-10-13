@@ -16,7 +16,7 @@ export class UserService {
     return await UserRepository.createUser(user);
   }
 
-  static async userExists(email: string) {
-    return !!(await UserRepository.getUserByEmail(email));
+  static async userExistsByEmail(email: string) {
+    return (await UserRepository.getUserByEmail(email)).at(0);
   }
 }

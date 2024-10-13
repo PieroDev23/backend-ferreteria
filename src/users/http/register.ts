@@ -3,6 +3,7 @@ import { UserService } from "../service";
 import { STATUS_CODES } from "../../_statusCodes";
 import { JWT } from "../../_jwt";
 import { UserInsertSchema, userInsertSchema } from "../types";
+import { logger } from "../../_log.";
 
 export async function registerUser(
   req: express.Request,
@@ -20,8 +21,9 @@ export async function registerUser(
       return;
     }
 
-    const userExists = await UserService.userExists(data.email);
-    if (!userExists) {
+    const userExists = await UserService.userExistsByEmail(data.email);
+
+    if (userExists) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
         ok: false,
         message: "user already exists",
@@ -45,13 +47,8 @@ export async function registerUser(
       user,
       token,
     });
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.name);
-      console.log(error.message);
-    }
-    res
-      .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json({ ok: false, message: "Server Error" });
+  } catch (e) {
+    logger.error(e as Error);
+    res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({ ok: false });
   }
 }

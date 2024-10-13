@@ -19,6 +19,15 @@ export class UserRepository {
   }
 
   static async getUserByEmail(email: string) {
-    return await db.select().from(users).where(eq(users.email, email));
+    return await db
+      .select({
+        id: users.id,
+        firstname: users.firstname,
+        lastname: users.lastname,
+        phone: users.phone,
+        password: users.password,
+      })
+      .from(users)
+      .where(eq(users.email, email));
   }
 }

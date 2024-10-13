@@ -2,6 +2,7 @@ import express from "express";
 import { ProductsService } from "../service";
 import { productInsertSchema } from "../types";
 import { STATUS_CODES } from "../../_statusCodes";
+import { logger } from "../../_log.";
 
 export async function createProduct(
   req: express.Request,
@@ -22,14 +23,8 @@ export async function createProduct(
       ok: true,
       product,
     });
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.name);
-      console.log(error.message);
-    }
-
-    res
-      .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json({ ok: false, message: "Server Error" });
+  } catch (e) {
+    logger.error(e as Error);
+    res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({ ok: false });
   }
 }
