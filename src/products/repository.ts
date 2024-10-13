@@ -33,7 +33,10 @@ export class ProductsRepository {
     const { id, ...fields } = product;
     return await db
       .update(products)
-      .set({ ...fields })
+      .set({
+        ...fields,
+        updatedAt: new Date(),
+      })
       .where(eq(products.id, id))
       .returning();
   }

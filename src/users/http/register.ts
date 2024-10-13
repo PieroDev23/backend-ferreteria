@@ -2,6 +2,7 @@ import express from "express";
 import { userInserSchema, UserInserSchema } from "../types";
 import { UserService } from "../service";
 import { STATUS_CODES } from "../../_statusCodes";
+import { JWT } from "../../_jwt";
 
 export async function registerUser(
   req: express.Request,
@@ -31,10 +32,20 @@ export async function registerUser(
     const passwordHashed = UserService.hashPassword(data.password);
     data.password = passwordHashed;
 
-    const user = await UserService.createUser(data);
+    const [user] = await UserService.createUser(data);
+
+    const jwt = await new JWT().create(
+      user,
+      Math.floor(Date.now() / 1000) + 10,
+      "CLIENT",
+    );
+
     res.status(STATUS_CODES.OK).json({
       ok: true,
-      user,
+      user: {
+        ...user,
+        jwt,
+      },
     });
   } catch (error) {
     if (error instanceof Error) {

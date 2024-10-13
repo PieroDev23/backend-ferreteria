@@ -5,6 +5,7 @@ import morgan from "morgan";
 import { pool } from "./db";
 import { categoriesRouter } from "./categories/routes";
 import { productsRouter } from "./products/routes";
+import { AppError } from "./_error";
 
 export class FerreteriaApp {
   private _app: express.Express;
@@ -34,9 +35,7 @@ export class FerreteriaApp {
       await pool.connect();
       console.log("🚀 Database connected");
     } catch (error) {
-      if (error instanceof Error) {
-        console.log(`${error.name}: ${error.message}`);
-      }
+      throw AppError.fromError(error as Error);
     }
   }
 

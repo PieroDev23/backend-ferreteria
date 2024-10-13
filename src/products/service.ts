@@ -42,12 +42,11 @@ export class ProductsService {
 
   static async createProduct(newProduct: ProductInsertSchema) {
     const { quantity, ...product } = newProduct;
-
     const [inventoryCreated] = await InventoryService.createInventory({
       quantity,
     });
-    product.inventoryId = inventoryCreated.id;
 
+    product.inventoryId = inventoryCreated.id;
     const [productCreated] = await ProductsRepository.createProduct(product);
     return productCreated;
   }

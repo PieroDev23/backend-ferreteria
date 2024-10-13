@@ -19,7 +19,10 @@ export class InventoryRepository {
   }) {
     return await db
       .update(inventory)
-      .set({ quantity })
+      .set({
+        quantity,
+        updatedAt: new Date(),
+      })
       .where(eq(inventory.id, inventoryId));
   }
 
