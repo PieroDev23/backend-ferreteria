@@ -37,7 +37,13 @@ export const productUpdateSchema = z.object({
   discountId: z.string().uuid().nullable(),
 });
 
+export const productDeleteSchema = z.object({
+  productId: z.string().uuid(),
+  inventoryId: z.string().uuid(),
+});
+
 // CRUD operation products
 export type ProductSelectSchema = z.infer<typeof productSelectSchema>;
 export type ProductInsertSchema = z.infer<typeof productInsertSchema>;
 export type ProductUpdateSchema = z.infer<typeof productUpdateSchema>;
+export type ProductDeleteSchema = z.infer<typeof productDeleteSchema>;

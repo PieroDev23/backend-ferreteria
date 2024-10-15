@@ -29,11 +29,7 @@ export async function loginUser(req: express.Request, res: express.Response) {
       return;
     }
 
-    const token = await new JWT().create(
-      currentUser,
-      Math.floor(Date.now() / 1000) + 10,
-      "CLIENT",
-    );
+    const token = await new JWT().create(currentUser, "1 hour", "CLIENT");
 
     res.status(STATUS_CODES.OK).json({
       ok: true,

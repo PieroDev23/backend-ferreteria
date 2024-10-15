@@ -13,4 +13,4 @@ export const pool = new Pool({
   },
 });
 
-export const db = drizzle(pool, { logger: true });
+export const db = drizzle(pool, { logger: false });

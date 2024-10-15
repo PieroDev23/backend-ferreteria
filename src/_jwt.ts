@@ -7,7 +7,7 @@ export class JWT {
     this.secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
   }
 
-  create(payload: Record<string, unknown>, exp: number, issuer: string) {
+  create(payload: Record<string, unknown>, exp: string, issuer: string) {
     return new SignJWT(payload)
       .setProtectedHeader({ alg: process.env.JWT_ALG! })
       .setIssuedAt()

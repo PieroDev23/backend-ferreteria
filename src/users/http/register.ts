@@ -35,11 +35,7 @@ export async function registerUser(
     data.password = passwordHashed;
 
     const [user] = await UserService.createUser(data);
-    const token = await new JWT().create(
-      user,
-      Math.floor(Date.now() / 1000) + 10,
-      "CLIENT",
-    );
+    const token = await new JWT().create(user, "1 hour", "CLIENT");
 
     res.status(STATUS_CODES.OK).json({
       ok: true,
