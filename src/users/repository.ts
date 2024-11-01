@@ -18,7 +18,7 @@ export class UserRepository {
       });
   }
 
-  static async getUserByEmail(email: string) {
+  static async findUserByEmail(email: string) {
     return await db
       .select({
         id: users.id,

@@ -13,4 +13,4 @@ export const clientAuthSchema = z.object({
 });
 
 export type UserInsertSchema = z.infer<typeof userInsertSchema>;
-export type clientAuthSchema = z.infer<typeof clientAuthSchema>;
+export type ClientAuthSchema = z.infer<typeof clientAuthSchema>;

@@ -2,12 +2,22 @@ import express from "express";
 import { logger } from "../../_log.";
 import { STATUS_CODES } from "../../_statusCodes";
 import { UserService } from "../service";
-import { JWT } from "../../_jwt";
+import { JWT } from "../../jwt";
+import { UserRepository } from "../repository";
+import { clientAuthSchema } from "../types";
 
 export async function loginUser(req: express.Request, res: express.Response) {
   try {
-    const incomingUser: { email: string; password: string } = req.body;
-    const user = await UserService.userExistsByEmail(incomingUser.email);
+    const { success, error, data } = clientAuthSchema.safeParse(req.body);
+    if (!success) {
+      res.status(STATUS_CODES.BAD_REQUEST).json({
+        ok: false,
+        error,
+      });
+      return;
+    }
+
+    const [user] = await UserRepository.findUserByEmail(data.email);
     if (!user) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
         ok: false,
@@ -18,9 +28,10 @@ export async function loginUser(req: express.Request, res: express.Response) {
 
     const { password, ...currentUser } = user;
     const isPasswordCorrect = UserService.comparePasswords(
-      incomingUser.password,
+      data.password,
       password,
     );
+
     if (!isPasswordCorrect) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
         ok: false,

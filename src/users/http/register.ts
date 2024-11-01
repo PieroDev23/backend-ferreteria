@@ -1,9 +1,10 @@
 import express from "express";
 import { UserService } from "../service";
 import { STATUS_CODES } from "../../_statusCodes";
-import { JWT } from "../../_jwt";
+import { JWT } from "../../jwt";
 import { UserInsertSchema, userInsertSchema } from "../types";
 import { logger } from "../../_log.";
+import { UserRepository } from "../repository";
 
 export async function registerUser(
   req: express.Request,
@@ -12,7 +13,6 @@ export async function registerUser(
   try {
     const newUser: UserInsertSchema = req.body;
     const { success, data, error } = userInsertSchema.safeParse(newUser);
-
     if (!success) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
         ok: false,
@@ -21,8 +21,7 @@ export async function registerUser(
       return;
     }
 
-    const userExists = await UserService.userExistsByEmail(data.email);
-
+    const [userExists] = await UserRepository.findUserByEmail(data.email);
     if (userExists) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
         ok: false,
@@ -34,7 +33,7 @@ export async function registerUser(
     const passwordHashed = UserService.hashPassword(data.password);
     data.password = passwordHashed;
 
-    const [user] = await UserService.createUser(data);
+    const [user] = await UserRepository.createUser(data);
     const token = await new JWT().create(user, "1 hour", "CLIENT");
 
     res.status(STATUS_CODES.OK).json({

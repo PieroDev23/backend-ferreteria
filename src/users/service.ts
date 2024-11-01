@@ -1,6 +1,4 @@
 import bcrypt from "bcrypt";
-import { UserInsertSchema } from "./types";
-import { UserRepository } from "./repository";
 
 export class UserService {
   static hashPassword(password: string) {
@@ -10,13 +8,5 @@ export class UserService {
 
   static comparePasswords(password: string, hashedPassword: string) {
     return bcrypt.compareSync(password, hashedPassword);
-  }
-
-  static async createUser(user: UserInsertSchema) {
-    return await UserRepository.createUser(user);
-  }
-
-  static async userExistsByEmail(email: string) {
-    return (await UserRepository.getUserByEmail(email)).at(0);
   }
 }
