@@ -3,14 +3,15 @@ import { ProductsRepository } from "./repository";
 import { ProductInsertSchema, ProductUpdateSchema } from "./types";
 
 export class ProductsService {
-  static calculateDiscount(discount: number | undefined, price: number) {
-    return discount ? price * (discount / 100) : price;
+  static calculateDiscount(discount: number | null, price: number) {
+    return discount ? price * (discount / 100) : 0;
   }
 
   static async getProducts() {
     const products = await ProductsRepository.getProducts();
     return products.map(({ products, inventory, categories, discounts }) => ({
       id: products.id,
+      image: products.image,
       name: products.name,
       sku: products.sku,
       description: products.description,
@@ -18,17 +19,25 @@ export class ProductsService {
       category: categories.name,
       categoryId: categories.id,
       inventoryId: inventory.id,
+      discountId: discounts?.id || null,
       quantity: inventory.quantity,
       discount: discounts ? discounts.percentage : 0,
-      totalPrice: this.calculateDiscount(discounts?.percentage, products.price),
+      totalPrice:
+        products.price -
+        this.calculateDiscount(discounts?.percentage || null, products.price),
     }));
   }
 
   static async getProductById(productId: string) {
     const [product] = await ProductsRepository.getProductById(productId);
+
+    if (!product) {
+      return null;
+    }
     const { products, inventory, categories, discounts } = product;
     return {
       id: products.id,
+      image: products.image,
       name: products.name,
       sku: products.sku,
       description: products.description,
@@ -38,7 +47,9 @@ export class ProductsService {
       inventoryId: inventory.id,
       quantity: inventory.quantity,
       discount: discounts ? discounts.percentage : 0,
-      totalPrice: this.calculateDiscount(discounts?.percentage, products.price),
+      totalPrice:
+        products.price -
+        this.calculateDiscount(discounts?.percentage || null, products.price),
     };
   }
 

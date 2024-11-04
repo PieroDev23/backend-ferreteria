@@ -11,7 +11,7 @@ export async function getCategories(
     const response = await db.select().from(categories);
     res.status(STATUS_CODES.OK).json({
       ok: true,
-      response,
+      categories: response,
     });
   } catch (e) {
     logger.error(e as Error);
