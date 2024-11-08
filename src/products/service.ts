@@ -20,7 +20,8 @@ export class ProductsService {
       categoryId: categories.id,
       inventoryId: inventory.id,
       discountId: discounts?.id || null,
-      quantity: inventory.quantity,
+      stock: inventory.quantity,
+      quantity: 0,
       discount: discounts ? discounts.percentage : 0,
       totalPrice:
         products.price -
@@ -45,7 +46,8 @@ export class ProductsService {
       category: categories.name,
       categoryId: categories.id,
       inventoryId: inventory.id,
-      quantity: inventory.quantity,
+      stock: inventory.quantity,
+      quantity: 0,
       discount: discounts ? discounts.percentage : 0,
       totalPrice:
         products.price -
