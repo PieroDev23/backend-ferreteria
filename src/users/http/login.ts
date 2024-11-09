@@ -8,6 +8,7 @@ import { clientAuthSchema } from "../types";
 
 export async function loginUser(req: express.Request, res: express.Response) {
   try {
+    console.log(req.body);
     const { success, error, data } = clientAuthSchema.safeParse(req.body);
     if (!success) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
@@ -21,7 +22,7 @@ export async function loginUser(req: express.Request, res: express.Response) {
     if (!user) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
         ok: false,
-        message: "Bad Credentials",
+        message: "Credenciales incorrectas",
       });
       return;
     }
@@ -35,7 +36,7 @@ export async function loginUser(req: express.Request, res: express.Response) {
     if (!isPasswordCorrect) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
         ok: false,
-        message: "Bad Credentials",
+        message: "Credenciales incorrectas",
       });
       return;
     }

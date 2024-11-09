@@ -25,7 +25,7 @@ export async function registerUser(
     if (userExists) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
         ok: false,
-        message: "user already exists",
+        message: "ya existe un usuario con estas credenciales",
       });
       return;
     }

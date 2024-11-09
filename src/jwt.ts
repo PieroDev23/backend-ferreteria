@@ -17,10 +17,9 @@ export class JWT {
       .sign(this.secretKey);
   }
 
-  verify(token: string, issuer: string) {
+  verify(token: string) {
     try {
       return jwtVerify(token, this.secretKey, {
-        issuer,
         audience: process.env.JWT_AUDIENCE,
       });
     } catch (error) {

@@ -19,8 +19,16 @@ export async function authMiddelware(
     }
 
     const [, token] = headers.authorization.split("Bearer ");
-    const itsValid = await new JWT().verify(token, "CLIENT");
-    logger.debug("IS VALID TOKEN", { itsValid });
+    const itsValid = await new JWT().verify(token);
+
+    if (!itsValid) {
+      res.status(STATUS_CODES.UNAUTHORIZED).json({
+        ok: false,
+        message: "Unautorized",
+      });
+      return;
+    }
+
     next();
   } catch (error) {
     logger.error(error as Error);

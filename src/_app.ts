@@ -2,12 +2,13 @@ import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
-import { pool } from "./db";
-import { categoriesRouter } from "./categories/routes";
-import { productsRouter } from "./products/routes";
 import { AppError } from "./_error";
-import { usersRouter } from "./users/routes";
 import { logger } from "./_log.";
+import { categoriesRouter } from "./categories/routes";
+import { pool } from "./db";
+import { ordersRouter } from "./orders/routes";
+import { productsRouter } from "./products/routes";
+import { usersRouter } from "./users/routes";
 
 export class FerreteriaApp {
   private _app: express.Express;
@@ -24,6 +25,7 @@ export class FerreteriaApp {
     this._app.use(`${baseRoute}/products`, productsRouter);
     this._app.use(`${baseRoute}/categories`, categoriesRouter);
     this._app.use(`${baseRoute}/users`, usersRouter);
+    this._app.use(`${baseRoute}/orders`, ordersRouter);
   }
 
   middlewares() {

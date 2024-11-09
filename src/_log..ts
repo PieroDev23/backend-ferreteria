@@ -10,7 +10,7 @@ export type LogLevel =
 
 function log(level: LogLevel, content: string | Error, data?: unknown): void {
   // Do not log if running tests
-  if (process && process.env && process.env.DISABLE_LOGS === "true") {
+  if (process && process.env && process.env.APP_DISABLE_LOGS === "true") {
     return;
   }
 

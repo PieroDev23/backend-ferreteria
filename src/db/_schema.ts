@@ -98,10 +98,11 @@ export const ordersDetails = ferreteriaSchema.table("orders_details", {
     .primaryKey(),
   userId: uuid("user_id")
     .references(() => users.id)
-    .notNull(),
+    .default(sql`NULL`),
   addressId: uuid("address_id")
     .references(() => usersAddresses.id)
-    .notNull(),
+    .default(sql`NULL`),
+  guestAddress: varchar("guest_address").default(sql`NULL`),
   totalAmount: integer("total_amount").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -116,7 +117,7 @@ export const paymentsDetails = ferreteriaSchema.table("payments_details", {
   orderId: uuid("order_id")
     .references(() => ordersDetails.id)
     .notNull(),
-  provider: varchar("provider").notNull(),
+  provider: varchar("provider").default(sql`NULL`),
   status: varchar("status").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
