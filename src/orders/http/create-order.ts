@@ -45,7 +45,7 @@ export async function createOrder(req: express.Request, res: express.Response) {
         addressId,
         totalAmount: data.totalAmount.toString(),
         guestId: null,
-        status: "RECIVED",
+        status: "RECIBIDO",
         userId,
       });
     } else {
@@ -65,7 +65,7 @@ export async function createOrder(req: express.Request, res: express.Response) {
         addressId: null, // Los invitados no tienen direcciones guardadas
         totalAmount: data.totalAmount.toString(),
         guestId: guest.id,
-        status: "RECIVED",
+        status: "RECIBIDO",
         userId: null,
       });
     }

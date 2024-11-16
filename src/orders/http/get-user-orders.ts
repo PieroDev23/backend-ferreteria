@@ -9,7 +9,6 @@ export async function getOrdersByUser(
 ) {
   try {
     const user = req.headers["user"] as string | undefined;
-    console.log(user);
 
     if (!user) {
       res.status(STATUS_CODES.UNAUTHORIZED).json({
@@ -19,11 +18,11 @@ export async function getOrdersByUser(
       return;
     }
 
-    console.log(JSON.parse(user).payload.id);
-
+    const parsedUser = JSON.parse(user);
     const orders = await OrdersRepository.getOrdersByUserId(
-      JSON.parse(user).payload.id,
+      parsedUser.payload.id,
     );
+
     res.status(STATUS_CODES.OK).json({
       ok: true,
       orders,

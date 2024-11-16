@@ -8,6 +8,6 @@ import { getOrdersByUser } from "./http/get-user-orders";
 export const ordersRouter = Router();
 
 ordersRouter.post("/create", authMiddelware, createOrder);
-ordersRouter.get("/:id", getOrderById);
 ordersRouter.get("/user", authMiddelware, getOrdersByUser);
+ordersRouter.get("/:id", getOrderById);
 ordersRouter.get("/", getOrders);
