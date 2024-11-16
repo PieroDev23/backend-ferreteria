@@ -27,6 +27,14 @@ export class OrdersRepository {
       .returning();
   }
 
+  static async updateOrder(payload: { orderId: string; status: string }) {
+    return await db
+      .update(orders)
+      .set({ status: payload.status })
+      .where(eq(orders.id, payload.orderId))
+      .returning();
+  }
+
   static async getOrders() {
     // Paso 1: Obtener los datos básicos del pedido
     const ordersResult = await db
