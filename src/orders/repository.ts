@@ -81,6 +81,7 @@ export class OrdersRepository {
         createdAt: order.createdAt,
         user: order.userName,
         products: [],
+        productCount: 0, // Inicializamos el conteo de productos
       });
     });
 
@@ -88,6 +89,7 @@ export class OrdersRepository {
     orderItemsResult.forEach((item) => {
       const order = ordersMap.get(item.orderId);
       if (order) {
+        // Añadir el producto a la lista
         order.products.push({
           id: item.productId,
           name: item.productName,
@@ -95,6 +97,9 @@ export class OrdersRepository {
           discount: item.discountPercentage,
           quantity: item.quantity,
         });
+
+        // Incrementar el conteo total de productos considerando la cantidad
+        order.productCount += item.quantity;
       }
     });
 

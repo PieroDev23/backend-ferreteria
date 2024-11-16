@@ -11,8 +11,6 @@ export async function getOrderById(
     const orderId = req.params.id;
     const orderDetails = await OrdersRepository.getOrderDetails(orderId);
 
-    console.log({ orderDetails });
-
     res.status(STATUS_CODES.OK).json({
       ok: true,
       orderDetails,
