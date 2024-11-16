@@ -1,6 +1,6 @@
 {
-  "id": "d469458c-c7b8-4d23-8845-b6f265775005",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "dfc3ef80-8497-42f3-8951-58bbcb104d9f",
+  "prevId": "c01b37eb-1339-4cb9-926c-0d429bb20dd7",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -322,7 +322,7 @@
         },
         "total_amount": {
           "name": "total_amount",
-          "type": "integer",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -600,13 +600,6 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
-        },
-        "postal_code": {
-          "name": "postal_code",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "NULL"
         },
         "country": {
           "name": "country",

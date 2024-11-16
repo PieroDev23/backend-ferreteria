@@ -9,6 +9,8 @@ import { pool } from "./db";
 import { ordersRouter } from "./orders/routes";
 import { productsRouter } from "./products/routes";
 import { usersRouter } from "./users/routes";
+import cookieParser from "cookie-parser";
+import { userAddressesRouter } from "./userAddresses/routes";
 
 export class FerreteriaApp {
   private _app: express.Express;
@@ -26,13 +28,20 @@ export class FerreteriaApp {
     this._app.use(`${baseRoute}/categories`, categoriesRouter);
     this._app.use(`${baseRoute}/users`, usersRouter);
     this._app.use(`${baseRoute}/orders`, ordersRouter);
+    this._app.use(`${baseRoute}/user-addresses`, userAddressesRouter);
   }
 
   middlewares() {
     this._app.disable("x-powered-by");
     this._app.use(express.json());
     this._app.use(morgan("dev"));
-    this._app.use(cors());
+    this._app.use(cookieParser());
+    this._app.use(
+      cors({
+        origin: true,
+        credentials: true,
+      }),
+    );
   }
 
   async dbConnection() {

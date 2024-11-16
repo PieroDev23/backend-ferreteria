@@ -1,25 +1,4 @@
-CREATE SCHEMA "ferreteria";
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "ferreteria"."admin_types" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"admin_id" uuid NOT NULL,
-	"permissions" json NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	"deleted_at" timestamp
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "ferreteria"."admins" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"firstname" varchar NOT NULL,
-	"lastname" varchar NOT NULL,
-	"email" varchar NOT NULL,
-	"password" varchar NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	"deleted_at" timestamp,
-	CONSTRAINT "admins_email_unique" UNIQUE("email")
-);
+CREATE SCHEMA IF NOT EXISTS "ferreteria";
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "ferreteria"."categories" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
@@ -36,6 +15,19 @@ CREATE TABLE IF NOT EXISTS "ferreteria"."discounts" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "ferreteria"."guests" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"firstname" varchar NOT NULL,
+	"lastname" varchar NOT NULL,
+	"phone" varchar,
+	"address" varchar NOT NULL,
+	"country" varchar NOT NULL,
+	"city" varchar NOT NULL,
+	"email" varchar,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "ferreteria"."inventory" (
@@ -55,22 +47,13 @@ CREATE TABLE IF NOT EXISTS "ferreteria"."order_items" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "ferreteria"."orders_details" (
+CREATE TABLE IF NOT EXISTS "ferreteria"."orders" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"user_id" uuid NOT NULL,
-	"address_id" uuid NOT NULL,
+	"user_id" uuid DEFAULT NULL,
+	"address_id" uuid DEFAULT NULL,
+	"guest_id" uuid DEFAULT NULL,
+	"status" varchar,
 	"total_amount" integer NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	"deleted_at" timestamp
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "ferreteria"."payments_details" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"total_amount" integer NOT NULL,
-	"order_id" uuid NOT NULL,
-	"provider" varchar NOT NULL,
-	"status" varchar NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp
@@ -91,15 +74,6 @@ CREATE TABLE IF NOT EXISTS "ferreteria"."products" (
 	"deleted_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "ferreteria"."users_payments" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"user_id" uuid NOT NULL,
-	"payment_type" varchar NOT NULL,
-	"provider" varchar NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "ferreteria"."users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"firstname" varchar NOT NULL,
@@ -115,10 +89,10 @@ CREATE TABLE IF NOT EXISTS "ferreteria"."users" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "ferreteria"."users_addresses" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"user_id" uuid NOT NULL,
+	"user_id" uuid,
 	"adderss_line_1" varchar NOT NULL,
 	"address_line_2" varchar,
-	"postal_code" varchar NOT NULL,
+	"postal_code" varchar DEFAULT NULL,
 	"country" varchar NOT NULL,
 	"city" varchar NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -127,13 +101,7 @@ CREATE TABLE IF NOT EXISTS "ferreteria"."users_addresses" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "ferreteria"."admin_types" ADD CONSTRAINT "admin_types_admin_id_admins_id_fk" FOREIGN KEY ("admin_id") REFERENCES "ferreteria"."admins"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "ferreteria"."order_items" ADD CONSTRAINT "order_items_order_id_orders_details_id_fk" FOREIGN KEY ("order_id") REFERENCES "ferreteria"."orders_details"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "ferreteria"."order_items" ADD CONSTRAINT "order_items_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "ferreteria"."orders"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -145,19 +113,19 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "ferreteria"."orders_details" ADD CONSTRAINT "orders_details_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "ferreteria"."users"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "ferreteria"."orders" ADD CONSTRAINT "orders_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "ferreteria"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "ferreteria"."orders_details" ADD CONSTRAINT "orders_details_address_id_users_addresses_id_fk" FOREIGN KEY ("address_id") REFERENCES "ferreteria"."users_addresses"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "ferreteria"."orders" ADD CONSTRAINT "orders_address_id_users_addresses_id_fk" FOREIGN KEY ("address_id") REFERENCES "ferreteria"."users_addresses"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "ferreteria"."payments_details" ADD CONSTRAINT "payments_details_order_id_orders_details_id_fk" FOREIGN KEY ("order_id") REFERENCES "ferreteria"."orders_details"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "ferreteria"."orders" ADD CONSTRAINT "orders_guest_id_guests_id_fk" FOREIGN KEY ("guest_id") REFERENCES "ferreteria"."guests"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -176,12 +144,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "ferreteria"."products" ADD CONSTRAINT "products_inventory_id_inventory_id_fk" FOREIGN KEY ("inventory_id") REFERENCES "ferreteria"."inventory"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "ferreteria"."users_payments" ADD CONSTRAINT "users_payments_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "ferreteria"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

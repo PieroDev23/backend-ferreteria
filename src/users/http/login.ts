@@ -8,7 +8,6 @@ import { clientAuthSchema } from "../types";
 
 export async function loginUser(req: express.Request, res: express.Response) {
   try {
-    console.log(req.body);
     const { success, error, data } = clientAuthSchema.safeParse(req.body);
     if (!success) {
       res.status(STATUS_CODES.BAD_REQUEST).json({
@@ -43,10 +42,16 @@ export async function loginUser(req: express.Request, res: express.Response) {
 
     const token = await new JWT().create(currentUser, "1 hour", "CLIENT");
 
+    res.cookie("f_session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict", // Usa 'lax' en vez de 'strict'
+      maxAge: 3600 * 1000,
+    });
+
     res.status(STATUS_CODES.OK).json({
       ok: true,
       user: currentUser,
-      token,
     });
   } catch (e) {
     logger.error(e as Error);

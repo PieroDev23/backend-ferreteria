@@ -1,136 +1,9 @@
 {
-  "id": "a4e83dca-eede-4b34-91a0-0be1a5f1f6d3",
-  "prevId": "8d3161d9-e8f7-4706-aadc-3b26c8fffae2",
+  "id": "c01b37eb-1339-4cb9-926c-0d429bb20dd7",
+  "prevId": "d469458c-c7b8-4d23-8845-b6f265775005",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "ferreteria.admin_types": {
-      "name": "admin_types",
-      "schema": "ferreteria",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "admin_id": {
-          "name": "admin_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "permissions": {
-          "name": "permissions",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "admin_types_admin_id_admins_id_fk": {
-          "name": "admin_types_admin_id_admins_id_fk",
-          "tableFrom": "admin_types",
-          "tableTo": "admins",
-          "schemaTo": "ferreteria",
-          "columnsFrom": ["admin_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "ferreteria.admins": {
-      "name": "admins",
-      "schema": "ferreteria",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "firstname": {
-          "name": "firstname",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "lastname": {
-          "name": "lastname",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "password": {
-          "name": "password",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "admins_email_unique": {
-          "name": "admins_email_unique",
-          "nullsNotDistinct": false,
-          "columns": ["email"]
-        }
-      }
-    },
     "ferreteria.categories": {
       "name": "categories",
       "schema": "ferreteria",
@@ -216,6 +89,79 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ferreteria.guests": {
+      "name": "guests",
+      "schema": "ferreteria",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "firstname": {
+          "name": "firstname",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lastname": {
+          "name": "lastname",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country": {
+          "name": "country",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "city": {
+          "name": "city",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -312,10 +258,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "order_items_order_id_orders_details_id_fk": {
-          "name": "order_items_order_id_orders_details_id_fk",
+        "order_items_order_id_orders_id_fk": {
+          "name": "order_items_order_id_orders_id_fk",
           "tableFrom": "order_items",
-          "tableTo": "orders_details",
+          "tableTo": "orders",
           "schemaTo": "ferreteria",
           "columnsFrom": ["order_id"],
           "columnsTo": ["id"],
@@ -336,8 +282,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "ferreteria.orders_details": {
-      "name": "orders_details",
+    "ferreteria.orders": {
+      "name": "orders",
       "schema": "ferreteria",
       "columns": {
         "id": {
@@ -352,20 +298,27 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": false,
-          "default": "'NULL'"
+          "default": "NULL"
         },
         "address_id": {
           "name": "address_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "NULL"
         },
-        "guest_address": {
-          "name": "guest_address",
-          "type": "varchar",
+        "guest_id": {
+          "name": "guest_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false,
-          "default": "'NULL'"
+          "default": "NULL"
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
         },
         "total_amount": {
           "name": "total_amount",
@@ -396,9 +349,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "orders_details_user_id_users_id_fk": {
-          "name": "orders_details_user_id_users_id_fk",
-          "tableFrom": "orders_details",
+        "orders_user_id_users_id_fk": {
+          "name": "orders_user_id_users_id_fk",
+          "tableFrom": "orders",
           "tableTo": "users",
           "schemaTo": "ferreteria",
           "columnsFrom": ["user_id"],
@@ -406,84 +359,22 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "orders_details_address_id_users_addresses_id_fk": {
-          "name": "orders_details_address_id_users_addresses_id_fk",
-          "tableFrom": "orders_details",
+        "orders_address_id_users_addresses_id_fk": {
+          "name": "orders_address_id_users_addresses_id_fk",
+          "tableFrom": "orders",
           "tableTo": "users_addresses",
           "schemaTo": "ferreteria",
           "columnsFrom": ["address_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "ferreteria.payments_details": {
-      "name": "payments_details",
-      "schema": "ferreteria",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
         },
-        "total_amount": {
-          "name": "total_amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "order_id": {
-          "name": "order_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "provider": {
-          "name": "provider",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "status": {
-          "name": "status",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "payments_details_order_id_orders_details_id_fk": {
-          "name": "payments_details_order_id_orders_details_id_fk",
-          "tableFrom": "payments_details",
-          "tableTo": "orders_details",
+        "orders_guest_id_guests_id_fk": {
+          "name": "orders_guest_id_guests_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "guests",
           "schemaTo": "ferreteria",
-          "columnsFrom": ["order_id"],
+          "columnsFrom": ["guest_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -608,66 +499,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "ferreteria.users_payments": {
-      "name": "users_payments",
-      "schema": "ferreteria",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "payment_type": {
-          "name": "payment_type",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "provider": {
-          "name": "provider",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "users_payments_user_id_users_id_fk": {
-          "name": "users_payments_user_id_users_id_fk",
-          "tableFrom": "users_payments",
-          "tableTo": "users",
-          "schemaTo": "ferreteria",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "ferreteria.users": {
       "name": "users",
       "schema": "ferreteria",
@@ -756,7 +587,7 @@
           "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "adderss_line_1": {
           "name": "adderss_line_1",
@@ -769,12 +600,6 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
-        },
-        "postal_code": {
-          "name": "postal_code",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
         },
         "country": {
           "name": "country",

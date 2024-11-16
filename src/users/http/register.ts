@@ -36,10 +36,16 @@ export async function registerUser(
     const [user] = await UserRepository.createUser(data);
     const token = await new JWT().create(user, "1 hour", "CLIENT");
 
+    res.cookie("f_session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict", // Usa 'lax' en vez de 'strict'
+      maxAge: 3600 * 1000,
+    });
+
     res.status(STATUS_CODES.OK).json({
       ok: true,
       user,
-      token,
     });
   } catch (e) {
     logger.error(e as Error);

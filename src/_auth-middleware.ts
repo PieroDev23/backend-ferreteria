@@ -9,24 +9,21 @@ export async function authMiddelware(
   next: express.NextFunction,
 ) {
   try {
-    const headers = req.headers;
-    if (!headers.authorization || !headers.authorization.includes("Bearer")) {
-      res.status(STATUS_CODES.UNAUTHORIZED).json({
-        ok: false,
-        message: "Unauthorized",
-      });
-      return;
+    const sessionCookie = req.cookies.f_session;
+    console.log(sessionCookie);
+    const jwt = new JWT();
+
+    if (!sessionCookie) {
+      req.headers["user"] = "";
     }
 
-    const [, token] = headers.authorization.split("Bearer ");
-    const itsValid = await new JWT().verify(token);
-
-    if (!itsValid) {
-      res.status(STATUS_CODES.UNAUTHORIZED).json({
-        ok: false,
-        message: "Unautorized",
-      });
-      return;
+    try {
+      const payload = await jwt.verify(sessionCookie);
+      console.log(payload);
+      req.headers["user"] = JSON.stringify(payload);
+    } catch (error) {
+      console.log(error);
+      req.headers["user"] = "";
     }
 
     next();

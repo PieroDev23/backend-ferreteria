@@ -1,0 +1,1 @@
+ALTER TABLE "ferreteria"."orders" ALTER COLUMN "total_amount" SET DATA TYPE varchar;
