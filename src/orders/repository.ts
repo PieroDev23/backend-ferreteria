@@ -16,7 +16,7 @@ type Order = {
   addressId: string | null;
   guestId: string | null;
   totalAmount: string;
-  status: "PROCESANDO" | "COMPLETADO" | "ENTEGADO" | "RECIBIDO";
+  status: "PROCESANDO" | "COMPLETADO" | "ENTEGADO" | "RECIBIDO" | "RECHAZADO";
 };
 
 export class OrdersRepository {
